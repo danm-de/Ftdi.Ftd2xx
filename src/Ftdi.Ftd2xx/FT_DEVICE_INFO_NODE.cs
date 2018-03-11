@@ -12,26 +12,32 @@ namespace Ftdi.Ftd2xx
         /// Indicates device state.  Can be any combination of the following: FT_FLAGS_OPENED, FT_FLAGS_HISPEED
         /// </summary>
         public uint Flags;
+
         /// <summary>
         /// Indicates the device type.  Can be one of the following: FT_DEVICE_232R, FT_DEVICE_2232C, FT_DEVICE_BM, FT_DEVICE_AM, FT_DEVICE_100AX or FT_DEVICE_UNKNOWN
         /// </summary>
         public FT_DEVICE Type;
+
         /// <summary>
         /// The Vendor ID and Product ID of the device
         /// </summary>
         public uint ID;
+
         /// <summary>
         /// The physical location identifier of the device
         /// </summary>
         public uint LocId;
+
         /// <summary>
         /// The device serial number
         /// </summary>
         public string SerialNumber;
+
         /// <summary>
         /// The device description
         /// </summary>
         public string Description;
+
         /// <summary>
         /// The device handle.  This value is not used externally and is provided for information only.
         /// If the device is not open, this value is 0.

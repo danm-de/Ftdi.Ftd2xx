@@ -13,14 +13,17 @@
         /// Determines if IOs are pulled down when the device is in suspend
         /// </summary>
         public bool PullDownEnable = false;
+
         /// <summary>
         /// Determines if the serial number is enabled
         /// </summary>
         public bool SerNumEnable = true;
+
         /// <summary>
         /// Determines if the USB version number is enabled
         /// </summary>
         public bool USBVersionEnable = true;
+
         /// <summary>
         /// The USB version number.  Should be either 0x0110 (USB 1.1) or 0x0200 (USB 2.0)
         /// </summary>

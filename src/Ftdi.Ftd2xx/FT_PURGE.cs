@@ -9,6 +9,7 @@
         /// Purge Rx buffer
         /// </summary>
         public const byte FT_PURGE_RX = 0x01;
+
         /// <summary>
         /// Purge Tx buffer
         /// </summary>

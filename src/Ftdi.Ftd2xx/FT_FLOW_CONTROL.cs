@@ -8,18 +8,21 @@
         /// <summary>
         /// No flow control
         /// </summary>
-        public const ushort FT_FLOW_NONE		= 0x0000;
+        public const ushort FT_FLOW_NONE = 0x0000;
+
         /// <summary>
         /// RTS/CTS flow control
         /// </summary>
-        public const ushort FT_FLOW_RTS_CTS		= 0x0100;
+        public const ushort FT_FLOW_RTS_CTS = 0x0100;
+
         /// <summary>
         /// DTR/DSR flow control
         /// </summary>
-        public const ushort FT_FLOW_DTR_DSR		= 0x0200;
+        public const ushort FT_FLOW_DTR_DSR = 0x0200;
+
         /// <summary>
         /// Xon/Xoff flow control
         /// </summary>
-        public const ushort FT_FLOW_XON_XOFF	= 0x0400;
+        public const ushort FT_FLOW_XON_XOFF = 0x0400;
     }
 }

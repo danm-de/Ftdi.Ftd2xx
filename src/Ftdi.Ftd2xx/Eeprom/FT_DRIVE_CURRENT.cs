@@ -8,18 +8,21 @@
         /// <summary>
         /// 4mA drive current
         /// </summary>
-        public const byte FT_DRIVE_CURRENT_4MA	= 4;
+        public const byte FT_DRIVE_CURRENT_4MA = 4;
+
         /// <summary>
         /// 8mA drive current
         /// </summary>
-        public const byte FT_DRIVE_CURRENT_8MA	= 8;
+        public const byte FT_DRIVE_CURRENT_8MA = 8;
+
         /// <summary>
         /// 12mA drive current
         /// </summary>
-        public const byte FT_DRIVE_CURRENT_12MA	= 12;
+        public const byte FT_DRIVE_CURRENT_12MA = 12;
+
         /// <summary>
         /// 16mA drive current
         /// </summary>
-        public const byte FT_DRIVE_CURRENT_16MA	= 16;
+        public const byte FT_DRIVE_CURRENT_16MA = 16;
     }
 }

@@ -9,6 +9,7 @@
         /// 8 data bits
         /// </summary>
         public const byte FT_BITS_8 = 0x08;
+
         /// <summary>
         /// 7 data bits
         /// </summary>

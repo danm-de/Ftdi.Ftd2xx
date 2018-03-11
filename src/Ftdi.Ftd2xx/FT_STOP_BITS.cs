@@ -9,6 +9,7 @@
         /// 1 stop bit
         /// </summary>
         public const byte FT_STOP_BITS_1 = 0x00;
+
         /// <summary>
         /// 2 stop bits
         /// </summary>
