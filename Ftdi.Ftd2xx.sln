@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ftdi.Ftd2xx", "src\Ftdi.Ftd2xx\Ftdi.Ftd2xx.csproj", "{40F67C9B-D702-4991-B4B2-BCF483EC3737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{1212AF2C-BE58-445D-AAA9-52343C5032E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeDummyProject", ".build\FakeDummyProject\FakeDummyProject.csproj", "{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40F67C9B-D702-4991-B4B2-BCF483EC3737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F67C9B-D702-4991-B4B2-BCF483EC3737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F67C9B-D702-4991-B4B2-BCF483EC3737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F67C9B-D702-4991-B4B2-BCF483EC3737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2AB9D226-5BC9-4BD2-B642-CDADBD0D75A5} = {1212AF2C-BE58-445D-AAA9-52343C5032E6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9B7A3D2-EDAE-424C-9FA5-6BB7DD261562}
+	EndGlobalSection
+EndGlobal

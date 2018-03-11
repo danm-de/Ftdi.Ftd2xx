@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Daniel Müller</Authors>
+    <Company>None</Company>
+    <Description>A managed .NET wrapper class for FTDI's FTD2XX.DLL to access serial USB devices</Description>
+    <Copyright>Daniel Müller</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/danm-de/Ftdi.Ftd2xx/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/danm-de/Ftdi.Ftd2xx</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/danm-de/Ftdi.Ftd2xx</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ftdi ftd2xx</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="dotnet-fake" Version="5.0.0-*" />
+  </ItemGroup>
+</Project>
