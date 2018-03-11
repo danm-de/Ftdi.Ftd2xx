@@ -191,7 +191,7 @@ namespace Ftdi.Ftd2xx.Interop
         private delegate FT_STATUS tFT_CreateDeviceInfoList(ref uint numdevs);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate FT_STATUS tFT_GetDeviceInfoDetail(uint index, ref uint flags, ref FT_DEVICE chiptype,
+        private delegate FT_STATUS tFT_GetDeviceInfoDetail(uint index, ref uint flags, ref ChipType chiptype,
             ref uint id, ref uint locid, byte[] serialnumber, byte[] description, ref IntPtr ftHandle);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -274,7 +274,7 @@ namespace Ftdi.Ftd2xx.Interop
         private delegate FT_STATUS tFT_SetBreakOff(IntPtr ftHandle);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate FT_STATUS tFT_GetDeviceInfo(IntPtr ftHandle, ref FT_DEVICE pftType, ref uint lpdwID,
+        private delegate FT_STATUS tFT_GetDeviceInfo(IntPtr ftHandle, ref ChipType pftType, ref uint lpdwID,
             byte[] pcSerialNumber, byte[] pcDescription, IntPtr pvDummy);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -532,7 +532,7 @@ namespace Ftdi.Ftd2xx.Interop
                         // Buffer not big enough
                         ftErrorCondition = FT_ERROR.FT_BUFFER_SIZE;
                         // Throw exception
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Instantiate the array elements as FT_DEVICE_INFO_NODE
@@ -1631,31 +1631,31 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Set Bit Mode does not apply to FT8U232AM, FT8U245AM or FT8U100AX devices
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType == FT_DEVICE.FT_DEVICE_AM)
+                    if (DeviceType == ChipType.FT8U2xxAM)
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
-                    else if (DeviceType == FT_DEVICE.FT_DEVICE_100AX)
+                    else if (DeviceType == ChipType.FT8U100AX)
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_BM) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT2xxBM) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         if ((BitMode & (FT_BIT_MODES.FT_BIT_MODE_ASYNC_BITBANG)) == 0)
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_2232) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT2232) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         if ((BitMode & (FT_BIT_MODES.FT_BIT_MODE_ASYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_MPSSE |
                                         FT_BIT_MODES.FT_BIT_MODE_SYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_MCU_HOST |
@@ -1663,7 +1663,7 @@ namespace Ftdi.Ftd2xx.Interop
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
 
                         if ((BitMode == FT_BIT_MODES.FT_BIT_MODE_MPSSE) & (InterfaceIdentifier != "A"))
@@ -1671,20 +1671,20 @@ namespace Ftdi.Ftd2xx.Interop
                             // MPSSE mode is only available on channel A
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_232R) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT2xxR) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         if ((BitMode & (FT_BIT_MODES.FT_BIT_MODE_ASYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_SYNC_BITBANG |
                                         FT_BIT_MODES.FT_BIT_MODE_CBUS_BITBANG)) == 0)
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_2232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT2232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         if ((BitMode & (FT_BIT_MODES.FT_BIT_MODE_ASYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_MPSSE |
                                         FT_BIT_MODES.FT_BIT_MODE_SYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_MCU_HOST |
@@ -1693,7 +1693,7 @@ namespace Ftdi.Ftd2xx.Interop
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
 
                         if (((BitMode == FT_BIT_MODES.FT_BIT_MODE_MCU_HOST) |
@@ -1702,17 +1702,17 @@ namespace Ftdi.Ftd2xx.Interop
                             // MCU Host Emulation and Single channel synchronous 245 FIFO mode is only available on channel A
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_4232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT4232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         if ((BitMode & (FT_BIT_MODES.FT_BIT_MODE_ASYNC_BITBANG | FT_BIT_MODES.FT_BIT_MODE_MPSSE |
                                         FT_BIT_MODES.FT_BIT_MODE_SYNC_BITBANG)) == 0)
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
 
                         if ((BitMode == FT_BIT_MODES.FT_BIT_MODE_MPSSE) &
@@ -1721,17 +1721,17 @@ namespace Ftdi.Ftd2xx.Interop
                             // MPSSE mode is only available on channel A and B
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
-                    else if ((DeviceType == FT_DEVICE.FT_DEVICE_232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
+                    else if ((DeviceType == ChipType.FT232H) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                     {
                         // FT232H supports all current bit modes!
                         if (BitMode > FT_BIT_MODES.FT_BIT_MODE_SYNC_FIFO)
                         {
                             // Throw an exception
                             ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                            ErrorHandler(ftStatus, ftErrorCondition);
+                            ftStatus.ThrowOnError(ftErrorCondition);
                         }
                     }
 
@@ -1904,14 +1904,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is not an FT232R or FT245R that we are trying to erase
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType == FT_DEVICE.FT_DEVICE_232R)
+                    if (DeviceType == ChipType.FT2xxR)
                     {
                         // If it is a device with an internal EEPROM, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Call FT_EraseEE
@@ -1957,14 +1957,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232B or FT245B that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_BM)
+                    if (DeviceType != ChipType.FT2xxBM)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2049,14 +2049,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT2232 that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_2232)
+                    if (DeviceType != ChipType.FT2232)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2152,14 +2152,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232R or FT245R that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_232R)
+                    if (DeviceType != ChipType.FT2xxR)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2259,14 +2259,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT2232H that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_2232H)
+                    if (DeviceType != ChipType.FT2232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2371,14 +2371,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT4232H that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_4232H)
+                    if (DeviceType != ChipType.FT4232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2482,14 +2482,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232H that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_232H)
+                    if (DeviceType != ChipType.FT232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eedata = new FT_PROGRAM_DATA
@@ -2597,14 +2597,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232H that we are trying to read
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_X_SERIES)
+                    if (DeviceType != ChipType.XSERIES)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     var eeData = new FT_XSERIES_DATA();
@@ -2615,7 +2615,7 @@ namespace Ftdi.Ftd2xx.Interop
                     var description = new byte[64];
                     var serialNumber = new byte[16];
 
-                    eeHeader.deviceType = (uint) FT_DEVICE.FT_DEVICE_X_SERIES;
+                    eeHeader.deviceType = (uint) ChipType.XSERIES;
                     eeData.common = eeHeader;
 
                     // Calculate the size of our data structure...
@@ -2734,14 +2734,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232B or FT245B that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_BM)
+                    if (DeviceType != ChipType.FT2xxBM)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -2847,14 +2847,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT2232 that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_2232)
+                    if (DeviceType != ChipType.FT2232)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -2970,14 +2970,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232R or FT245R that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_232R)
+                    if (DeviceType != ChipType.FT2xxR)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -3101,14 +3101,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT2232H that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_2232H)
+                    if (DeviceType != ChipType.FT2232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -3232,14 +3232,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT4232H that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_4232H)
+                    if (DeviceType != ChipType.FT4232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -3362,14 +3362,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232H that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_232H)
+                    if (DeviceType != ChipType.FT232H)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -3500,14 +3500,14 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Check that it is an FT232H that we are trying to write
                     GetDeviceType(ref DeviceType);
-                    if (DeviceType != FT_DEVICE.FT_DEVICE_X_SERIES)
+                    if (DeviceType != ChipType.XSERIES)
                     {
                         // If it is not, throw an exception
                         ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ftStatus.ThrowOnError(ftErrorCondition);
                     }
 
                     // Check for VID and PID of 0x0000
@@ -3546,7 +3546,7 @@ namespace Ftdi.Ftd2xx.Interop
 
                     // Map non-string elements to structure to be returned
                     // Standard elements
-                    eeData.common.deviceType = (uint) FT_DEVICE.FT_DEVICE_X_SERIES;
+                    eeData.common.deviceType = (uint) ChipType.XSERIES;
                     eeData.common.VendorId = eeX.VendorID;
                     eeData.common.ProductId = eeX.ProductID;
                     eeData.common.MaxPower = eeX.MaxPower;
@@ -3735,8 +3735,8 @@ namespace Ftdi.Ftd2xx.Interop
         /// Gets the chip type of the current device.
         /// </summary>
         /// <returns>FT_STATUS value from FT_GetDeviceInfo in FTD2XX.DLL</returns>
-        /// <param name="DeviceType">The FTDI chip type of the current device.</param>
-        public FT_STATUS GetDeviceType(ref FT_DEVICE DeviceType)
+        /// <param name="chipType">The FTDI chip type of the current device.</param>
+        public FT_STATUS GetDeviceType(ref ChipType chipType)
         {
             // Initialise ftStatus to something other than FT_OK
             var ftStatus = FT_STATUS.FT_OTHER_ERROR;
@@ -3756,12 +3756,12 @@ namespace Ftdi.Ftd2xx.Interop
                 var sernum = new byte[16];
                 var desc = new byte[64];
 
-                DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                chipType = ChipType.Unknown;
 
                 if (ftHandle != IntPtr.Zero)
                 {
                     // Call FT_GetDeviceInfo
-                    ftStatus = FT_GetDeviceInfo(ftHandle, ref DeviceType, ref DeviceID, sernum, desc, IntPtr.Zero);
+                    ftStatus = FT_GetDeviceInfo(ftHandle, ref chipType, ref DeviceID, sernum, desc, IntPtr.Zero);
                 }
             }
             else
@@ -3800,7 +3800,7 @@ namespace Ftdi.Ftd2xx.Interop
                     (tFT_GetDeviceInfo) Marshal.GetDelegateForFunctionPointer(pFT_GetDeviceInfo,
                         typeof(tFT_GetDeviceInfo));
 
-                var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                var DeviceType = Ftd2xx.ChipType.Unknown;
                 var sernum = new byte[16];
                 var desc = new byte[64];
 
@@ -3850,7 +3850,7 @@ namespace Ftdi.Ftd2xx.Interop
                         typeof(tFT_GetDeviceInfo));
 
                 uint DeviceID = 0;
-                var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                var DeviceType = Ftd2xx.ChipType.Unknown;
                 var sernum = new byte[16];
                 var desc = new byte[64];
 
@@ -3902,7 +3902,7 @@ namespace Ftdi.Ftd2xx.Interop
                         typeof(tFT_GetDeviceInfo));
 
                 uint DeviceID = 0;
-                var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                var DeviceType = Ftd2xx.ChipType.Unknown;
                 var sernum = new byte[16];
                 var desc = new byte[64];
 
@@ -4681,10 +4681,10 @@ namespace Ftdi.Ftd2xx.Interop
 
                 if (ftHandle != IntPtr.Zero)
                 {
-                    var DeviceType = FT_DEVICE.FT_DEVICE_UNKNOWN;
+                    var DeviceType = Ftd2xx.ChipType.Unknown;
                     // Set Bit Mode does not apply to FT8U232AM, FT8U245AM or FT8U100AX devices
                     GetDeviceType(ref DeviceType);
-                    if ((DeviceType == FT_DEVICE.FT_DEVICE_BM) || (DeviceType == FT_DEVICE.FT_DEVICE_2232))
+                    if ((DeviceType == ChipType.FT2xxBM) || (DeviceType == ChipType.FT2232))
                     {
                         // Do not allow latency of 1ms or 0ms for older devices
                         // since this can cause problems/lock up due to buffering mechanism
@@ -5048,10 +5048,10 @@ namespace Ftdi.Ftd2xx.Interop
                 var identifier = string.Empty;
                 if (IsOpen)
                 {
-                    var deviceType = FT_DEVICE.FT_DEVICE_BM;
+                    var deviceType = ChipType.FT2xxBM;
                     GetDeviceType(ref deviceType);
-                    if ((deviceType == FT_DEVICE.FT_DEVICE_2232) | (deviceType == FT_DEVICE.FT_DEVICE_2232H) |
-                        (deviceType == FT_DEVICE.FT_DEVICE_4232H))
+                    if ((deviceType == ChipType.FT2232) | (deviceType == ChipType.FT2232H) |
+                        (deviceType == ChipType.FT4232H))
                     {
                         GetDescription(out var description);
                         identifier = description.Substring((description.Length - 1));
@@ -5070,112 +5070,6 @@ namespace Ftdi.Ftd2xx.Interop
         //**************************************************************************
         // ErrorHandler
         //**************************************************************************
-        /// <summary>
-        /// Method to check ftStatus and ftErrorCondition values for error conditions and throw exceptions accordingly.
-        /// </summary>
-        private void ErrorHandler(FT_STATUS ftStatus, FT_ERROR ftErrorCondition)
-        {
-            if (ftStatus != FT_STATUS.FT_OK)
-            {
-                // Check FT_STATUS values returned from FTD2XX DLL calls
-                switch (ftStatus)
-                {
-                    case FT_STATUS.FT_DEVICE_NOT_FOUND:
-                    {
-                        throw new FtdiDeviceNotFoundException("FTDI device not found.");
-                    }
-                    case FT_STATUS.FT_DEVICE_NOT_OPENED:
-                    {
-                        throw new FtdiDeviceNotOpenedException("FTDI device not opened.");
-                    }
-                    case FT_STATUS.FT_DEVICE_NOT_OPENED_FOR_ERASE:
-                    {
-                        throw new FtdiDeviceNotOpenedForEraseException("FTDI device not opened for erase.");
-                    }
-                    case FT_STATUS.FT_DEVICE_NOT_OPENED_FOR_WRITE:
-                    {
-                        throw new FtdiDeviceNotOpenedForWriteException("FTDI device not opened for write.");
-                    }
-                    case FT_STATUS.FT_EEPROM_ERASE_FAILED:
-                    {
-                        throw new FtdiEepromEraseFailedException("Failed to erase FTDI device EEPROM.");
-                    }
-                    case FT_STATUS.FT_EEPROM_NOT_PRESENT:
-                    {
-                        throw new FtdiEepromNotPresentException("No EEPROM fitted to FTDI device.");
-                    }
-                    case FT_STATUS.FT_EEPROM_NOT_PROGRAMMED:
-                    {
-                        throw new FtdiEepromNotProgrammedException("FTDI device EEPROM not programmed.");
-                    }
-                    case FT_STATUS.FT_EEPROM_READ_FAILED:
-                    {
-                        throw new FtdiEepromReadFailedException("Failed to read FTDI device EEPROM.");
-                    }
-                    case FT_STATUS.FT_EEPROM_WRITE_FAILED:
-                    {
-                        throw new FtdiEepromWriteFailedException("Failed to write FTDI device EEPROM.");
-                    }
-                    case FT_STATUS.FT_FAILED_TO_WRITE_DEVICE:
-                    {
-                        throw new FtdiFailedToWriteDeviceException("Failed to write to FTDI device.");
-                    }
-                    case FT_STATUS.FT_INSUFFICIENT_RESOURCES:
-                    {
-                        throw new FtdiInsufficientResourcesException("Insufficient resources.");
-                    }
-                    case FT_STATUS.FT_INVALID_ARGS:
-                    {
-                        throw new FtdiInvalidArgsException("Invalid arguments for FTD2XX function call.");
-                    }
-                    case FT_STATUS.FT_INVALID_BAUD_RATE:
-                    {
-                        throw new FtdiInvalidBaudRateException("Invalid Baud rate for FTDI device.");
-                    }
-                    case FT_STATUS.FT_INVALID_HANDLE:
-                    {
-                        throw new FtdiInvalidHandleException("Invalid handle for FTDI device.");
-                    }
-                    case FT_STATUS.FT_INVALID_PARAMETER:
-                    {
-                        throw new FtdiInvalidParameterException("Invalid parameter for FTD2XX function call.");
-                    }
-                    case FT_STATUS.FT_IO_ERROR:
-                    {
-                        throw new FtdiIoErrorException("FTDI device IO error.");
-                    }
-                    case FT_STATUS.FT_OTHER_ERROR:
-                    {
-                        throw new FtdiOtherErrorException(
-                            "An unexpected error has occurred when trying to communicate with the FTDI device.");
-                    }
-                }
-            }
-
-            if (ftErrorCondition != FT_ERROR.FT_NO_ERROR)
-            {
-                // Check for other error conditions not handled by FTD2XX DLL
-                switch (ftErrorCondition)
-                {
-                    case FT_ERROR.FT_INCORRECT_DEVICE:
-                    {
-                        throw new FtdiIncorrectDeviceException(
-                            "The current device type does not match the EEPROM structure.");
-                    }
-                    case FT_ERROR.FT_INVALID_BITMODE:
-                    {
-                        throw new FtdiInvalidBitmodeException(
-                            "The requested bit mode is not valid for the current device.");
-                    }
-                    case FT_ERROR.FT_BUFFER_SIZE:
-                    {
-                        throw new FtdiBufferSizeException("The supplied buffer is not big enough.");
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(ftErrorCondition), ftErrorCondition, null);
-                }
-            }
-        }
 
         #endregion
     }
