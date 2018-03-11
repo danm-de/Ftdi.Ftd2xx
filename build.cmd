@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 cls
 
 set ROOT=%~dp0

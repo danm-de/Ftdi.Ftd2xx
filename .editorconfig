@@ -4,7 +4,7 @@
 indent_style = space
 indent_size = 4
 
-[*.{cs,csproj,xaml,fsx,cmd}]
+[*.{cs,csproj,xaml,fsx}]
 charset = utf-8-bom
 end_of_line = crlf
 insert_final_newline = true
@@ -12,6 +12,11 @@ insert_final_newline = true
 [*.sh]
 charset = utf-8
 end_of_line = lf
+insert_final_newline = true
+
+[*.cmd]
+charset = utf-8
+end_of_line = crlf
 insert_final_newline = true
 
 [*.markdown]
