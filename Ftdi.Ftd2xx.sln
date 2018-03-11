@@ -9,12 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
 		LICENSE = LICENSE
+		LICENSE-FTDI = LICENSE-FTDI
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3122D203-5265-4249-9D05-58BB4931067D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ftdi.Ftd2xx.Tests", "tests\Ftdi.Ftd2xx.Tests\Ftdi.Ftd2xx.Tests.csproj", "{E5C2EA6C-E3CA-4B81-A851-E0E53399F836}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ftdi.Ftd2xx.Tests", "tests\Ftdi.Ftd2xx.Tests\Ftdi.Ftd2xx.Tests.csproj", "{E5C2EA6C-E3CA-4B81-A851-E0E53399F836}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
