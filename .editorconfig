@@ -1,0 +1,19 @@
+﻿root=true
+
+[*]
+indent_style = space
+indent_size = 4
+
+[*.{cs,csproj,xaml,fsx,cmd}]
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+
+[*.sh]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+[*.markdown]
+indent_style = space
+indent_size = 2
