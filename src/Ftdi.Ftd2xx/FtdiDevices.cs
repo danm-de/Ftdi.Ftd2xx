@@ -62,7 +62,7 @@ namespace Ftdi.Ftd2xx
                     var descriptionLength = descBuf.IndexOf(0) ?? 0;
                     var serialNumber = Encoding.ASCII.GetString(snBuf, 0, serialNumberLength);
                     var description = Encoding.ASCII.GetString(descBuf, 0, descriptionLength);
-                    deviceNodes[i] = new FtdiDeviceInfo(
+                    var node = new FtdiDeviceInfo(
                         flags: flags,
                         type: chipType,
                         id: id,
@@ -71,6 +71,7 @@ namespace Ftdi.Ftd2xx
                         serialNumber: serialNumber,
                         description: description
                     );
+                    deviceNodes[i] = node;
                 }
 
                 return deviceNodes;
